@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CreatingMino {
     internal class Program {
-        //Nマスのテトリミノを全て求める。
-        //すべて縦が長くなるように出力する。
+        //セルがN個のテトリミノを全て求める。
+        //縦が長くなるように出力する。
         //180°回転させたときに等しくなるミノ同士は同一のミノとみなし、どちらか一つのみを出力する。
         //　
         //　■　■■　■■　■　　　■　■■　■
@@ -16,7 +16,7 @@ namespace CreatingMino {
         //　■、　　、　　、　　、　　、　　、
         //　(出力例)
 
-        //今回の使用ミノ数
+        //今回の使用セル数
         const int N = 4;
 
         //結果を保持
