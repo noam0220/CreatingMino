@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9494E9C9-EB27-4C26-8F64-9D1F1171EBE5}</ProjectGuid>
+    <ProjectGuid>{07E7F641-355A-4B29-91EA-46A3FC900909}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>CreatingMino</RootNamespace>
-    <AssemblyName>CreatingMino</AssemblyName>
+    <RootNamespace>OldCreatingMino</RootNamespace>
+    <AssemblyName>OldCreatingMino</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,11 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mino.cs" />
-    <Compile Include="MinoList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
