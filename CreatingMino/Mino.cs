@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CreatingMino {
-    internal class Mino {
+    public class Mino {
         public List<int[]> Cells { get; }
         public int Height => CalcHeight();
         public int Width => CalcWidth();

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CreatingMino {
-    internal class MinoList {
+    public class MinoList {
         public int CellCount { get; }
         public List<Mino> MinoCollection { get; }
 
