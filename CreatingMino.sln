@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreatingMino", "CreatingMin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OldCreatingMino", "OldCreatingMino\OldCreatingMino.csproj", "{07E7F641-355A-4B29-91EA-46A3FC900909}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreatingMinoAnswer", "CreatingMinoAnswer\CreatingMinoAnswer.csproj", "{8BA4B15C-21D4-4174-ABAB-8D0F1E4F3771}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{07E7F641-355A-4B29-91EA-46A3FC900909}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07E7F641-355A-4B29-91EA-46A3FC900909}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07E7F641-355A-4B29-91EA-46A3FC900909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BA4B15C-21D4-4174-ABAB-8D0F1E4F3771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BA4B15C-21D4-4174-ABAB-8D0F1E4F3771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BA4B15C-21D4-4174-ABAB-8D0F1E4F3771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BA4B15C-21D4-4174-ABAB-8D0F1E4F3771}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
