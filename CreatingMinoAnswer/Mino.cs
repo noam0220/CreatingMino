@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CreatingMino {
+namespace CreatingMinoAnswer {
     public class Mino {
         //ミノの形状を表現するクラス。Blocksには各ブロックの位置をxy平面上の格子点に対応付け、その座標(y座標, x座標)が入る。
         //原点の座標は(0, 0)とし、xは正の方向に、yは負の方向に進む。
@@ -36,5 +36,8 @@ namespace CreatingMino {
         public int[] CalcSize() {
             return new int[] { Height, Width };
         }
+
+        //ブロックを追加する方向
+        public static string[] directionList = new string[] { "above", "right", "below", "left" };
     }
 }
