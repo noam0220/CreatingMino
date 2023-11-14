@@ -11,20 +11,23 @@ namespace CreatingMinoAnswer {
         //ブロックがN個の全てのテトリミノの形状と、その個数を求める。
         //縦が長くなるように出力する。
         //180°回転させたときに等しくなるミノ同士は同一のミノとみなし、どちらか一つのみを出力する。
-        //　ブロック数 4 の時 : 7個
+        //
         //　■　　■ ■　　■ ■　　■ 　　　　 ■　　■ ■　　　 ■
         //　■　　■ 　　　　 ■　　■ ■　　■ ■　　■ ■　　■ ■
         //　■　　■ 　　　　 ■　　■ 　　　■　　　　　　　　■ 
         //　■
+        //
+        //ブロック数 4 の時 : 7個
         //　(出力例, N = 4)
 
-        //各大きさのミノの結果を保持
-        static MinoList nextMinoList = new MinoList(1, new List<Mino> {
-            new Mino (new List<int[]>{ new int[] { 0, 0 } })
-        });
+        //ブロック数1のミノ
+        static Mino firstMino = new Mino(new List<int[]> { new int[] { 0, 0 } });
 
         //全ての結果を保持
-        static List<MinoList> minoLists = new List<MinoList> { nextMinoList };
+        static List<Mino> minoList = new List<Mino> { firstMino };
+
+        //ブロックが(i + 1)個のミノを保持
+        static List<Mino> nextMinoList = new List<Mino> { };
 
         //全てのブロック数のミノを出力するかどうか決める。
         static bool printAllFlg = true;
@@ -33,18 +36,12 @@ namespace CreatingMinoAnswer {
         //今回の使用ブロック数
         const int N = 4;
 
-        //回転して出力させる。
-        //const int degree = 0;
-
         static void Main(string[] args) {
             //変数名を考えてもらう。
             Stopwatch sw = Stopwatch.StartNew();
 
-            CreateMino(minoLists.First());
+            CreateMino(minoList);
 
-            //回転させて出力させる？
-            //minoLists = Mino.RoteteMino(minoLists, degree);
-            
             if (!printAllFlg) {
                 printList.Add(N);
             } else {
@@ -53,7 +50,7 @@ namespace CreatingMinoAnswer {
                 }
             }
 
-            MinoList.PrintMino(minoLists, printList);
+            Mino.PrintMino(minoList, printList);
 
             sw.Stop();
 
@@ -62,18 +59,18 @@ namespace CreatingMinoAnswer {
         }
 
         //BlockCountがiにおける全てのテトリミノの形状と、その個数を求める。
+        private static void CreateMino(List<Mino> oMinoList) {
 
-        private static void CreateMino(MinoList oMinoList) {
+            nextMinoList = new List<Mino>();
 
-            nextMinoList = new MinoList(oMinoList.BlockCount + 1, new List<Mino> { });
-
-            foreach(var oMino in oMinoList.MinoCollection) {
+            foreach(var oMino in oMinoList) {
                 var testBlocks = new List<int[]>();
 
                 //ブロックの外側に、1マス分の空のブロックを追加し、枠を作る。
                 foreach(var block in oMino.Blocks) {
                     testBlocks.Add(new int[] { block[0] + 1, block[1] + 1 });
                 }
+
                 //AddMino()でtestBlocksに対して操作すると反復処理が行えなくなるので、
                 //中身のみコピーしておく。
                 var tmpBlocks = testBlocks.Select(b => b.ToArray()).ToList();
@@ -81,14 +78,10 @@ namespace CreatingMinoAnswer {
                 //問題　繰り返しを取り除こう。
                 //上→右→下→左の順に、各ブロックの1つ隣に新たなブロックを追加できるか確認する。
                 var tmpBlock = new int[2];
-                foreach(var cell in testBlocks) {
-                    foreach(var direction in Mino.directionList) {
-                        switch(direction) {
-                            case "above": tmpBlock[0] = cell[0] - 1; tmpBlock[1] = cell[1]; break;
-                            case "right": tmpBlock[0] = cell[0]; tmpBlock[1] = cell[1] + 1; break;
-                            case "below": tmpBlock[0] = cell[0] + 1; tmpBlock[1] = cell[1]; break;
-                            case "left" : tmpBlock[0] = cell[0]; tmpBlock[1] = cell[1] - 1; break;
-                        }
+                foreach(var block in testBlocks) {
+                    foreach(var direction in Mino.directionMap.Keys) {
+                        tmpBlock = Mino.AddBlock(block, direction);
+
                         //選択された場所に、既にブロックが置かれていなければ、その形状をリストに追加する。
                         if(!testBlocks.Any(b => b.SequenceEqual(tmpBlock))) {
                             tmpBlocks = AddMino(tmpBlocks, tmpBlock);
@@ -97,11 +90,11 @@ namespace CreatingMinoAnswer {
                 }
             }
 
-            minoLists.Add(nextMinoList);
+            minoList.AddRange(nextMinoList);
 
             //i個のブロックのミノのパターンを使用して(i + 1)個のパターンを求めて、
-            //それをN個まで繰り返した後、、メインの処理を終了する。
-            if(nextMinoList.BlockCount < N) { CreateMino(nextMinoList); }
+            //それをN個まで繰り返した後、メインの処理を終了する。
+            if(nextMinoList.First().Blocks.Count() < N) { CreateMino(nextMinoList); }
         }
 
         //適切な形状であれば、ミノを生成しリストに追加する。
@@ -126,7 +119,7 @@ namespace CreatingMinoAnswer {
 
             //既に生成されているミノと比較して、重複がない場合のみミノを生成し、リストに追加する。
             if(CheckNoDuplication(blocksWithNoSpace, height, width)) {
-                nextMinoList.MinoCollection.Add(new Mino(blocksWithNoSpace));
+                nextMinoList.Add(new Mino(blocksWithNoSpace));
             };
             blocks.Remove(tBlock);
             return blocks;
@@ -154,7 +147,7 @@ namespace CreatingMinoAnswer {
         //与えられた形状に重複が無かった場合、trueを返す。
         private static bool CheckNoDuplication(List<int[]> blocks, int height, int width) {
             bool sameFlg;
-            foreach(var mino in nextMinoList.MinoCollection) {
+            foreach(var mino in nextMinoList) {
                 if(height == mino.Height && width == mino.Width) {
                     var rBlocks = blocks.Select(b => b.ToArray()).ToList();
                     var tmpBlocks = new List<int[]>();
