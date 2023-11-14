@@ -42,9 +42,6 @@ namespace CreatingMino {
 
             CreateMino(beforeMinoList);
 
-            //回転させて出力させる？
-            //minoLists = Mino.RoteteMino(minoLists, degree);
-
             MinoList.PrintMino(minoList);
 
             sw.Stop();
