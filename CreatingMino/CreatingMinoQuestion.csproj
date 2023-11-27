@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mino.cs" />
-    <Compile Include="MinoList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
