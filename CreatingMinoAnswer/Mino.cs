@@ -12,7 +12,7 @@ namespace CreatingMinoAnswer {
         //2　■
         //:
         //y
-        //このような形状のデータは、[ {"Blocks" : "{0, 0}, {0, 1}, {1, 0}, {2, 0}", "Height" : "3", "Width" : "2"}]となる。
+        //このような形状のデータは、[ {"Blocks" : "{0, 0}, {0, 1}, {1, 0}, {2, 0}", "Height" : "3", "Width" : "2"} ]となる。
         public List<int[]> Blocks { get; }
         public int Height => CalcHeight();
         public int Width => CalcWidth();
@@ -42,47 +42,38 @@ namespace CreatingMinoAnswer {
         };
 
         //ブロックを1つ追加する。
-        public static int[] AddBlock(int[] blocks, string direction) { 
+        public static int[] GetNewBlock(int[] blocks, string direction) { 
             return new int[] { blocks[0] + directionMap[direction][0], blocks[1] + directionMap[direction][1] };
         }
 
         //ミノを出力する。(N >= 9ではスクロールしきれず全パターンを表示できない。)
-        public static void PrintMino(List<Mino> minoList, List<int> printFlgs) {
-            //選択されたブロック数のminoListだけに絞り込む。
-            var printMinoList = minoList.Where(m => printFlgs.Contains(m.Blocks.Count())).ToList();
+        //【問題2 - 解答】処理を高速化しよう。
+        public static void PrintMino(List<Mino> minoList) {
 
-            //1つ前のminoのブロック数、Minoの総数を保持する。
-            var bfrBlockCount = minoList.First().Blocks.Count();
-            var minoCount = 0;
-
+            //ブロック数がNのミノのみ出力する。
+            var printMinoList = minoList.Where(
+                m => minoList.Last().Blocks.Count() == m.Blocks.Count()).ToList();
+            
             var sbAllMinos = new StringBuilder();
-            foreach(Mino mino in printMinoList) {
-                //現在のminoのブロック数を保持する。
-                var tmpBlockCount = mino.Blocks.Count();
 
-                if(tmpBlockCount != bfrBlockCount) {
-                    sbAllMinos.Append("ブロック数 " + bfrBlockCount + " の時 : " + minoCount + "個\n\n");
-                    minoCount = 0;
-                }
+            foreach(Mino mino in printMinoList) {
+                
                 //各ミノの縦×横の長さの、空文字が連続した文字列を生成する。
                 var sbMino = new StringBuilder(new string('　', mino.Height * mino.Width));
 
-                //各ブロックの座標から、何文字目を空文字から「■」に変換するかを求める。
+                //各ブロックの座標から、何文字目を「■」に変換するかを求める。
                 foreach(var block in mino.Blocks) {
                     var target = block[0] * mino.Width + block[1];
                     sbMino.Remove(target, 1).Insert(target, "■");
                 }
                 //各行末ごとに改行する。
-                for(int i = mino.Height; i > 0; i--) {
+                for(var i = mino.Height; i > 0; i--) {
                     var target = i * mino.Width;
                     sbMino.Insert(target, "\n");
                 }
                 sbAllMinos.Append(sbMino.Append("\n"));
-
-                bfrBlockCount = tmpBlockCount;
-                minoCount++;
             }
-            sbAllMinos.Append("ブロック数 " + bfrBlockCount + " の時 : " + minoCount + "個\n");
+            sbAllMinos.Append("ブロック数 " + minoList.Last().Blocks.Count() + " の時 : " + printMinoList.Count() + "個\n");
             Console.WriteLine(sbAllMinos.ToString());
             Console.WriteLine();
         }
