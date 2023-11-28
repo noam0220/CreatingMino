@@ -2,16 +2,16 @@
 
 namespace CreatingMinoAnswer {
     internal class Program {
-        //ブロックがN個の全てのテトリミノの形状と、その個数を求める。
+        //ブロックがN個のミノの全ての形状と、その個数を求める。
         //縦が長くなるように出力する。
-        //180°回転させたときに等しくなるミノ同士は同一のミノとみなし、どちらか一つのみを出力する。
+        //回転させたときに等しくなるミノ同士は同一のミノとみなし、どちらか一つのみを出力する。
         //
         //　■　　■ ■　　■ ■　　■ 　　　　 ■　　■ ■　　　 ■
         //　■　　■ 　　　　 ■　　■ ■　　■ ■　　■ ■　　■ ■
         //　■　　■ 　　　　 ■　　■ 　　　■　　　　　　　　■ 
         //　■
         //
-        //ブロック数 4 の時 : 7個
+        //　ブロック数 4 の時 : 7個
         //　(出力例, N = 4)
 
         //ブロック数1のミノ。
@@ -27,11 +27,15 @@ namespace CreatingMinoAnswer {
         const int N = 4;
 
         static void Main(string[] args) {
-            Stopwatch sw = Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
             CreateMino(minoList);
 
-            Mino.PrintMino(minoList);
+            //ブロック数がNのミノのみ出力する。
+            var printMinoList = minoList.Where(
+                m => minoList.Last().Blocks.Count() == m.Blocks.Count()).ToList();
+
+            Mino.PrintMino(printMinoList);
 
             sw.Stop();
 
@@ -39,7 +43,7 @@ namespace CreatingMinoAnswer {
 
         }
 
-        //【問題3】処理を汎用化しよう。(Nに4以外の自然数も入れられるようにする。)
+        //【問題3 - 解答】処理を汎用化しよう。(Nに4以外の自然数も入れられるようにする。)
         //ブロック数がi個の全てのミノの形状と、その個数を求める。
         private static void CreateMino(List<Mino> oMinoList) {
 
@@ -56,10 +60,10 @@ namespace CreatingMinoAnswer {
                 //AddMino()をtestBlocksに対して行うと反復処理が行えなくなるので、
                 //中身をコピーしておく。
                 var tmpBlocks = testBlocks.Select(b => b.ToArray()).ToList();
+                var newBlock = new int[2];
 
                 //上→右→下→左の順に、ブロックの隣に新たなブロックを置けるか確認する。
                 //【問題1 - 解答】重複を取り除こう。
-                var newBlock = new int[2];
                 foreach(var tBlock in testBlocks) {
                     foreach(var direction in Mino.directionMap.Keys) {
                         //tBlockの1つ上、右、下、左隣の座標を求める。
@@ -86,8 +90,8 @@ namespace CreatingMinoAnswer {
 
             var blocksWithNoSpace = RemoveSpaces(blocks);
 
-            int height = blocksWithNoSpace.Max(y => y[0]) - blocksWithNoSpace.Min(y => y[0]) + 1; 
-            int width = blocksWithNoSpace.Max(x => x[1]) - blocksWithNoSpace.Min(x => x[1]) + 1;
+            var height = blocksWithNoSpace.Max(y => y[0]) - blocksWithNoSpace.Min(y => y[0]) + 1;
+            var width = blocksWithNoSpace.Max(x => x[1]) - blocksWithNoSpace.Min(x => x[1]) + 1;
 
             //縦より横の長さの方が長い場合
             if(height < width) {
@@ -112,8 +116,8 @@ namespace CreatingMinoAnswer {
             blocks = blocks.OrderBy(y => y[0]).ThenBy(x => x[1]).ToList();
 
             //xMin(各座標の中で最小のx座標の値)を算出し、左端に何マスの隙間があるか計算する。 yMin(最小のy座標の値)も同様。
-            int xMin = blocks.Min(x => x[1]);
-            int yMin = blocks.Min(y => y[0]);
+            var xMin = blocks.Min(x => x[1]);
+            var yMin = blocks.Min(y => y[0]);
 
             var blocksWithNoSpace = new List<int[]>();
 
@@ -131,6 +135,7 @@ namespace CreatingMinoAnswer {
             foreach(var mino in nextMinoList) {
                 //縦と横の長さが同じ場合のみ重複をチェックする。
                 if(height == mino.Height && width == mino.Width) {
+                    //同じかどうか比較
                     var rBlocks = blocks.Select(b => b.ToArray()).ToList();
                     var tmpBlocks = new List<int[]>();
                     for(var i = 0; i < 4; i++) {
