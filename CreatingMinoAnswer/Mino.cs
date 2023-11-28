@@ -42,22 +42,18 @@ namespace CreatingMinoAnswer {
         };
 
         //ブロックを1つ追加する。
-        public static int[] GetNewBlock(int[] blocks, string direction) { 
+        public static int[] GetNewBlock(int[] blocks, string direction) {
             return new int[] { blocks[0] + directionMap[direction][0], blocks[1] + directionMap[direction][1] };
         }
 
-        //ミノを出力する。(N >= 9ではスクロールしきれず全パターンを表示できない。)
+        //ミノを出力する。(N ≥ 9ではスクロールしきれず全パターンを表示できない。)
         //【問題2 - 解答】処理を高速化しよう。
         public static void PrintMino(List<Mino> minoList) {
 
-            //ブロック数がNのミノのみ出力する。
-            var printMinoList = minoList.Where(
-                m => minoList.Last().Blocks.Count() == m.Blocks.Count()).ToList();
-            
             var sbAllMinos = new StringBuilder();
 
-            foreach(Mino mino in printMinoList) {
-                
+            foreach(var mino in minoList) {
+
                 //各ミノの縦×横の長さの、空文字が連続した文字列を生成する。
                 var sbMino = new StringBuilder(new string('　', mino.Height * mino.Width));
 
@@ -73,9 +69,8 @@ namespace CreatingMinoAnswer {
                 }
                 sbAllMinos.Append(sbMino.Append("\n"));
             }
-            sbAllMinos.Append("ブロック数 " + minoList.Last().Blocks.Count() + " の時 : " + printMinoList.Count() + "個\n");
+            sbAllMinos.Append("ブロック数 " + minoList.Last().Blocks.Count() + " の時 : " + minoList.Count() + "個\n");
             Console.WriteLine(sbAllMinos.ToString());
-            Console.WriteLine();
         }
     }
 }

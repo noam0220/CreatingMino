@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CreatingMino {
+namespace CreatingMinoQuestion {
     public class Mino {
         //ミノの形状を表現するクラス。Blocksには各ブロックの位置をxy平面上の格子点に対応付け、その座標(y座標, x座標)が入る。
         //原点の座標は(0, 0)とし、xは正の方向に、yは負の方向に進む。
@@ -15,7 +15,7 @@ namespace CreatingMino {
         //2　■
         //:
         //y
-        //このような形状のデータは、[ {"Blocks" : "{0, 0}, {0, 1}, {1, 0}, {2, 0}", "Height" : "3", "Width" : "2"}]となる。
+        //このような形状のデータは、[ {"Blocks" : "{0, 0}, {0, 1}, {1, 0}, {2, 0}", "Height" : "3", "Width" : "2"} ]となる。
         public List<int[]> Blocks { get; }
         public int Height => CalcHeight();
         public int Width => CalcWidth();
@@ -57,9 +57,8 @@ namespace CreatingMino {
 
             var sbAllMinos = new StringBuilder();
             var tmpMino = new int[2];
-            var blockFlg = false;
 
-            foreach(Mino mino in minoList) {
+            foreach(var mino in minoList) {
 
                 //各ミノの縦×横の長さの、空文字が連続した文字列を生成する。
                 var sbMino = new StringBuilder();
@@ -68,7 +67,7 @@ namespace CreatingMino {
                 //各行末ごとに改行する。
                 for(var i = 0; i < mino.Height; i++) {
                     for (var j = 0; j < mino.Width + 1; j++){
-                        blockFlg = false;
+                        var blockFlg = false;
                         if(j != mino.Width) {
                             (tmpMino[0], tmpMino[1]) = (i, j);
                             foreach(var block in mino.Blocks) {
@@ -85,11 +84,9 @@ namespace CreatingMino {
                     }
                 }
                 sbAllMinos.Append(sbMino.Append("\n"));
-
             }
             sbAllMinos.Append("ブロック数 " + minoList.Last().Blocks.Count() + " の時 : " + minoList.Count() + "個\n");
             Console.WriteLine(sbAllMinos.ToString());
-            Console.WriteLine();
         }
     }
 }

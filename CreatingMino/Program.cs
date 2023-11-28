@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace CreatingMino {
+namespace CreatingMinoQuestion {
     internal class Program {
-        //ブロックがN個の全てのテトリミノの形状と、その個数を求める。
+        //ブロックがN個のミノの全ての形状と、その個数を求める。
         //縦が長くなるように出力する。
-        //180°回転させたときに等しくなるミノ同士は同一のミノとみなし、どちらか一つのみを出力する。
+        //回転させたときに等しくなるミノ同士は同一のミノとみなし、どちらか一つのみを出力する。
         //
         //　■　　■ ■　　■ ■　　■ 　　　　 ■　　■ ■　　　 ■
         //　■　　■ 　　　　 ■　　■ ■　　■ ■　　■ ■　　■ ■
@@ -30,8 +30,8 @@ namespace CreatingMino {
         const int N = 4;
 
         static void Main(string[] args) {
-            //変数名を考えてもらう。
-            Stopwatch sw = Stopwatch.StartNew();
+
+            var sw = Stopwatch.StartNew();
 
             CreateMino(thridMinoList);
 
@@ -63,7 +63,6 @@ namespace CreatingMino {
                 //AddMino()をtestBlocksに対して行うと反復処理が行えなくなるので、
                 //中身をコピーしておく。
                 var tmpBlocks = testBlocks.Select(b => b.ToArray()).ToList();
-
                 var newBlock = new int[2];
 
                 //上→右→下→左の順に、ブロックの隣に新たなブロックを置けるか確認する。
@@ -103,8 +102,8 @@ namespace CreatingMino {
             blocks = blocks.OrderBy(y => y[0]).ThenBy(x => x[1]).ToList();
 
             //xMin(各座標の中で最小のx座標の値)を算出し、左端に何マスの隙間があるか計算する。 yMin(最小のy座標の値)も同様。
-            int xMin = blocks.Min(x => x[1]);
-            int yMin = blocks.Min(y => y[0]);
+            var xMin = blocks.Min(x => x[1]);
+            var yMin = blocks.Min(y => y[0]);
 
             var blocksWithNoSpace = new List<int[]>();
 
@@ -112,8 +111,8 @@ namespace CreatingMino {
                 blocksWithNoSpace.Add(new int[] { block[0] - yMin, block[1] - xMin });
             }
 
-            int height = blocksWithNoSpace.Max(y => y[0]) - blocksWithNoSpace.Min(y => y[0]) + 1;
-            int width = blocksWithNoSpace.Max(x => x[1]) - blocksWithNoSpace.Min(x => x[1]) + 1;
+            var height = blocksWithNoSpace.Max(y => y[0]) - blocksWithNoSpace.Min(y => y[0]) + 1;
+            var width = blocksWithNoSpace.Max(x => x[1]) - blocksWithNoSpace.Min(x => x[1]) + 1;
 
             //縦より横の長さの方が長い場合
             if(height < width) {
@@ -170,7 +169,7 @@ namespace CreatingMino {
                         tmpBlocks.Clear();
                     }
                 }
-            } 
+            }
             return true;
         }
     }
