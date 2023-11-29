@@ -6,9 +6,9 @@ namespace CreatingMinoAnswer {
         //縦が長くなるように出力する。
         //回転させたときに等しくなるミノ同士は同一のミノとみなし、どちらか一つのみを出力する。
         //
-        //　■　　■ ■　　■ ■　　■ 　　　　 ■　　■ ■　　　 ■
+        //　■　　■ ■　　■ ■　　■ 　　　　 ■　　■ ■　　■
         //　■　　■ 　　　　 ■　　■ ■　　■ ■　　■ ■　　■ ■
-        //　■　　■ 　　　　 ■　　■ 　　　■　　　　　　　　■ 
+        //　■　　■ 　　　　 ■　　■ 　　　■　　　　　　　　　 ■ 
         //　■
         //
         //　ブロック数 4 の時 : 7個
@@ -27,6 +27,7 @@ namespace CreatingMinoAnswer {
         const int N = 4;
 
         static void Main(string[] args) {
+
             var sw = Stopwatch.StartNew();
 
             CreateMino(minoList);
