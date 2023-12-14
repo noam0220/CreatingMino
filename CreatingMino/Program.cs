@@ -43,13 +43,13 @@ namespace CreatingMinoQuestion {
 
         }
 
+        //ブロック数がi個の全てのミノの形状と、その個数を求める。
         //【問題3】処理を汎用化しよう。(Nに4以外の自然数も入れられるようにする。)
         // ヒント : まず、N = 1のときのミノの組合わせを考え、
         // thridMinoListのように事前に定義しておこう。
-        // そして、CreateMino()で生成されるMinoのリストを引数として再利用して、
-        // 必要な回数分CreateMino()を呼び出すようにしよう。
-        // (再帰的に実装できると美しいですね。)
-        //ブロック数がi個の全てのミノの形状と、その個数を求める。
+        // そして、ブロック数が(i - 1)個のときのCreateMino()で生成されるMinoのリストを引数として再利用して、
+        // ブロック数がi個のときのCreateMino()を実行し…を繰り返し、必要な回数分CreateMino()を呼び出すようにしよう。
+        // (再帰的に実装できるとより美しいですね。)
         private static void CreateMino(List<Mino> minoList) {
 
             foreach(var mino in minoList) {
@@ -61,37 +61,52 @@ namespace CreatingMinoQuestion {
                 }
 
                 //AddMino()をtestBlocksに対して行うと反復処理が行えなくなるので、
-                //中身をコピーしておく。
+                //"testBlocks"の中身を"tmpBlocks"にコピーしておく。
                 var tmpBlocks = testBlocks.Select(b => b.ToArray()).ToList();
                 var newBlock = new int[2];
+                var settable = true;
 
                 //上→右→下→左の順に、ブロックの隣に新たなブロックを置けるか確認する。
-                //【問題1】重複を取り除こう。
-                // ヒント : GetNewBlock()と、Mino.directionMapを利用しよう。
+                //【問題2】重複を取り除こう。
+                // ヒント : 同じ処理が4回繰り返されていると、コードの修正に時間がかかってしまいます。
+                // foreach文を使って、できるだけ同様の記述は1つにまとめましょう。
+                // Mino.cs(Minoクラス)にあるGetNewBlock()と、Mino.directionMapを使うと楽かも…？
                 foreach(var tBlock in testBlocks) {
 
                     //tBlockの1つ上、右、下、左隣の座標を求める。
                     //newBlockに、既にブロックが置かれていなければ、その形状をminoListに追加する。
                     newBlock[0] = tBlock[0] - 1; newBlock[1] = tBlock[1];
-                    if(!testBlocks.Any(b => b.SequenceEqual(newBlock))) {
-                        AddMino(tmpBlocks, newBlock);
+                    foreach(var block in testBlocks) {
+                        if(block[0] == newBlock[0] && block[1] == newBlock[1]) {
+                            settable = false;
+                        }
                     }
-                    tmpBlocks.Remove(newBlock);
+                    if(settable == true) { AddMino(tmpBlocks, newBlock); tmpBlocks.Remove(newBlock); }
+                    settable = true;
                     newBlock[0] = tBlock[0]; newBlock[1] = tBlock[1] + 1;
-                    if(!testBlocks.Any(b => b.SequenceEqual(newBlock))) {
-                        AddMino(tmpBlocks, newBlock);
+                    foreach(var block in testBlocks) {
+                        if(block[0] == newBlock[0] && block[1] == newBlock[1]) {
+                            settable = false;
+                        }
                     }
-                    tmpBlocks.Remove(newBlock);
+                    if(settable == true) { AddMino(tmpBlocks, newBlock); tmpBlocks.Remove(newBlock); }
+                    settable = true;
                     newBlock[0] = tBlock[0] + 1; newBlock[1] = tBlock[1];
-                    if(!testBlocks.Any(b => b.SequenceEqual(newBlock))) {
-                        AddMino(tmpBlocks, newBlock);
+                    foreach(var block in testBlocks) {
+                        if(block[0] == newBlock[0] && block[1] == newBlock[1]) {
+                            settable = false;
+                        }
                     }
-                    tmpBlocks.Remove(newBlock);
+                    if(settable == true) { AddMino(tmpBlocks, newBlock); tmpBlocks.Remove(newBlock); }
+                    settable = true;
                     newBlock[0] = tBlock[0]; newBlock[1] = tBlock[1] - 1;
-                    if(!testBlocks.Any(b => b.SequenceEqual(newBlock))) {
-                        AddMino(tmpBlocks, newBlock);
+                    foreach(var block in testBlocks) {
+                        if(block[0] == newBlock[0] && block[1] == newBlock[1]) {
+                            settable = false;
+                        }
                     }
-                    tmpBlocks.Remove(newBlock);
+                    if(settable == true) { AddMino(tmpBlocks, newBlock); tmpBlocks.Remove(newBlock); }
+                    settable = true;
                 }
             }
         }
@@ -139,7 +154,6 @@ namespace CreatingMinoQuestion {
             if(CheckNoDuplication(blocksWithNoSpace, height, width)) {
                 minoList.Add(new Mino(blocksWithNoSpace));
             };
-            blocks.Remove(nBlock);
         }
 
         //重複しているミノの生成を防ぐ。

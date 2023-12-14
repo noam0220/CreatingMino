@@ -13,24 +13,26 @@ namespace CreatingMinoAnswer {
         //:
         //y
         //このような形状のデータは、[ {"Blocks" : "{0, 0}, {0, 1}, {1, 0}, {2, 0}", "Height" : "3", "Width" : "2"} ]となる。
+
+        //ブロックの座標
         public List<int[]> Blocks { get; }
+        //ミノの高さ
         public int Height => CalcHeight();
+        //ミノの長さ
         public int Width => CalcWidth();
 
         public Mino(List<int[]> blocks) {
             Blocks = blocks;
         }
 
+        //ミノの高さを求める。
         private int CalcHeight() {
             return Blocks.Max(y => y[0]) - Blocks.Min(y => y[0]) + 1;
         }
 
+        //ミノの長さを求める。
         private int CalcWidth() {
             return Blocks.Max(x => x[1]) - Blocks.Min(x => x[1]) + 1;
-        }
-
-        public int[] CalcSize() {
-            return new int[] { Height, Width };
         }
 
         //ブロックを追加する方向
@@ -47,7 +49,7 @@ namespace CreatingMinoAnswer {
         }
 
         //ミノを出力する。(N ≥ 9ではスクロールしきれず全パターンを表示できない。)
-        //【問題2 - 解答】処理を高速化しよう。
+        //【問題1 - 解答】処理を高速化しよう。
         public static void PrintMino(List<Mino> minoList) {
 
             var sbAllMinos = new StringBuilder();
@@ -57,14 +59,15 @@ namespace CreatingMinoAnswer {
                 //各ミノの縦×横の長さの、空文字が連続した文字列を生成する。
                 var sbMino = new StringBuilder(new string('　', mino.Height * mino.Width));
 
-                //各ブロックの座標から、何文字目を「■」に変換するかを求める。
+                //blockの座標から、何文字目を「■」に変換するかを求める。
+                var target = 0;
                 foreach(var block in mino.Blocks) {
-                    var target = block[0] * mino.Width + block[1];
+                    target = block[0] * mino.Width + block[1];
                     sbMino.Remove(target, 1).Insert(target, "■");
                 }
                 //各行末ごとに改行する。
                 for(var i = mino.Height; i > 0; i--) {
-                    var target = i * mino.Width;
+                    target = i * mino.Width;
                     sbMino.Insert(target, "\n");
                 }
                 sbAllMinos.Append(sbMino.Append("\n"));
