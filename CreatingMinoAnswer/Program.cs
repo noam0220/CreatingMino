@@ -23,6 +23,9 @@ namespace CreatingMinoAnswer {
         //ブロックが(i + 1)個のミノを保持する。
         static List<Mino> nextMinoList = new List<Mino> { };
 
+        //出力するミノを保持する。
+        static List<Mino> printMinoList = new List<Mino> { };
+
         //今回の使用ブロック数。
         const int N = 4;
 
@@ -33,8 +36,11 @@ namespace CreatingMinoAnswer {
             CreateMino(minoList);
 
             //ブロック数がNのミノのみ出力する。
-            var printMinoList = minoList.Where(
-                m => minoList.Last().Blocks.Count() == m.Blocks.Count()).ToList();
+            foreach(var mino in minoList) {
+                if(mino.Blocks.Count() == N) { 
+                    printMinoList.Add(mino);
+                }
+            }
 
             Mino.PrintMino(printMinoList);
 
@@ -44,8 +50,8 @@ namespace CreatingMinoAnswer {
 
         }
 
-        //【問題3 - 解答】処理を汎用化しよう。(Nに4以外の自然数も入れられるようにする。)
         //ブロック数がi個の全てのミノの形状と、その個数を求める。
+        //【問題3 - 解答】処理を汎用化しよう。(Nに4以外の自然数も入れられるようにする。)
         private static void CreateMino(List<Mino> oMinoList) {
 
             nextMinoList = new List<Mino>();
@@ -59,21 +65,29 @@ namespace CreatingMinoAnswer {
                 }
 
                 //AddMino()をtestBlocksに対して行うと反復処理が行えなくなるので、
-                //中身をコピーしておく。
+                //"testBlocks"の中身を"tmpBlocks"にコピーしておく。
                 var tmpBlocks = testBlocks.Select(b => b.ToArray()).ToList();
                 var newBlock = new int[2];
+                var settable = true;
 
                 //上→右→下→左の順に、ブロックの隣に新たなブロックを置けるか確認する。
-                //【問題1 - 解答】重複を取り除こう。
+                //【問題2 - 解答】重複を取り除こう。
                 foreach(var tBlock in testBlocks) {
                     foreach(var direction in Mino.directionMap.Keys) {
                         //tBlockの1つ上、右、下、左隣の座標を求める。
                         newBlock = Mino.GetNewBlock(tBlock, direction);
 
                         //tmpBlockに、既にブロックが置かれていなければ、その形状をminoListに追加する。
-                        if(!testBlocks.Any(b => b.SequenceEqual(newBlock))) {
-                            AddMino(tmpBlocks, newBlock);
+                        foreach(var block in testBlocks) {
+                            if(block[0] == newBlock[0] && block[1] == newBlock[1]) {
+                                settable = false;
+                            }
                         }
+                        if(settable == true) {
+                            AddMino(tmpBlocks, newBlock);
+                            tmpBlocks.Remove(newBlock);
+                        }
+                        settable = true;
                     }
                 }
             }
@@ -109,7 +123,6 @@ namespace CreatingMinoAnswer {
             if(CheckNoDuplication(blocksWithNoSpace, height, width)) {
                 nextMinoList.Add(new Mino(blocksWithNoSpace));
             };
-            blocks.Remove(nBlock);
         }
 
         //CreateMino()で加えられた外枠を取り除き、隙間を取り除いた形状にして返す。
